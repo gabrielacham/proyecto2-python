@@ -1,6 +1,3 @@
-# Django project with Bootstrap and font-awesome
-<img src="https://img.shields.io/badge/django-2.2-green"><img src="https://img.shields.io/static/v1?label=licence&message=GPL&color=blue"><img src="https://img.shields.io/static/v1?label=build&message=passing&color=green">
-
 ## Usage
 
 Create a project directory and install a python virtual environment inside it
@@ -15,7 +12,7 @@ Create a source dir and clone the repository
 
 ```bash
 mkdir src && cd src
-git clone https://github.com/thalesbruno/django_bootstrap .
+git clone https://github.com/gabrielacham/proyecto2-python.git .
 ```
 
 Install the dependencies
