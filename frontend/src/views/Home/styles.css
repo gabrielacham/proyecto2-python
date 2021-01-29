@@ -1,0 +1,27 @@
+.custom-select:focus {
+    border-color: #de6340;
+    box-shadow: 0 0 0 0.2rem rgb(215 174 130 / 25%);
+}
+.home-cancel-button{
+  color: #de6340;
+}
+.btn-secondary{
+  background-color: #de6340;
+  border-color: #de6340;
+}
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+    background-color: #de6340;
+    border-color: #de6340;
+}
+.btn-secondary.focus, .btn-secondary:focus {
+    background-color: #de6340;
+    border-color: #de6340;
+    box-shadow: 0 0 0 0.2rem rgb(215 174 130 / 50%);
+}
+.btn-secondary:not(:disabled):not(.disabled).active:focus, .btn-secondary:not(:disabled):not(.disabled):active:focus, .show>.btn-secondary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgb(215 174 130 / 50%);
+}
+.btn-secondary:hover {
+  background-color: #de6340;
+  border-color: #de6340;
+}

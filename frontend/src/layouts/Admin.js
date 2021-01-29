@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 import routes from "../routes.js";
+import "./styles.css";
 
 const switchRoutes = (
   <Switch>
@@ -36,8 +37,8 @@ export default function Admin({ ...rest }) {
     return window.location.pathname !== "/admin/maps";
   };
   return (
-    <div className='px-0 mx-auto'>
-      <div ref={mainPanel}>
+    <div className='px-0 mx-auto admin-wrapper'>
+      <div className='admin-main-panel' ref={mainPanel}>
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
@@ -45,8 +46,8 @@ export default function Admin({ ...rest }) {
         />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner styles are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
-          <div>
-            <div>{switchRoutes}</div>
+          <div className='content'>
+            <div className='admin-container'>{switchRoutes}</div>
           </div>
         ) : (
           <div>{switchRoutes}</div>
