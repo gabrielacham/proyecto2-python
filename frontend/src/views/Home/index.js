@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Row,
   Col,
@@ -8,7 +8,10 @@ import {
   FormGroup,
   Label,
   CustomInput,
-  Button
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter
  } from 'reactstrap';
 import "./styles.css";
 
@@ -71,51 +74,66 @@ function renderIngredients (data) {
 
 
 export default function Home() {
+
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
+
   return (
-        <Form>
-          <Row>
-            {/* Order Column */}
-            <Col sm='7'>
-              <Card className='p-3'>
+      <Form>
+        <Row>
+          {/* Order Column */}
+          <Col sm='7'>
+            <Card className='p-3'>
 
-                {/* Size Select */}
-                <FormGroup>
-                  <Label for="sandwichSize">Tamaño</Label>
-                  <CustomInput className='pr-3' type="select" name="sandwichSize" id="sandwichSize">
-                    {renderOptions(sandwichSizes)}
-                  </CustomInput>
-                </FormGroup>
+              {/* Size Select */}
+              <FormGroup>
+                <Label for="sandwichSize">Tamaño</Label>
+                <CustomInput className='pr-3' type="select" name="sandwichSize" id="sandwichSize">
+                  {renderOptions(sandwichSizes)}
+                </CustomInput>
+              </FormGroup>
 
-                {/* Additional Ingredients */}
-                <FormGroup>
-                  <Label for="adicionales">Ingredientes Adicionales</Label>
-                  <div>
-                    {renderIngredients(ingredients)}
-                  </div>
-                </FormGroup>
+              {/* Additional Ingredients */}
+              <FormGroup>
+                <Label for="adicionales">Ingredientes Adicionales</Label>
+                <div>
+                  {renderIngredients(ingredients)}
+                </div>
+              </FormGroup>
 
-                {/* Buttons Row */}
-                <Row className='mx-1'>
-                  {/* Cancel Button */}
-                  <Col sm='6'>
-                    <Button outline className='home-cancel-button'>Cancelar</Button>
-                  </Col>
+              {/* Buttons Row */}
+              <Row className='mx-1'>
+                {/* Cancel Button */}
+                <Col sm='6'>
+                  <Button outline className='home-cancel-button'>Cancelar</Button>
+                </Col>
 
-                  {/* Accept Button */}
-                  <Col sm='6' className='d-flex justify-content-end'>
-                    <Button className='home-button'>Aceptar</Button>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
+                {/* Accept Button */}
+                <Col sm='6' className='d-flex justify-content-end'>
+                  <Button onClick={toggle} className='home-button'>Aceptar</Button>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
 
-            {/* Bill Column */}
-            <Col sm='5'>
-              <Card className='p-3'>
-                <CardTitle>Factura</CardTitle>
-              </Card>
-            </Col>
-          </Row>
-        </Form>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalBody className='d-flex justify-content-center'>
+              ¿Desea Agregar Otro Sandwich a su Pedido?
+            </ModalBody>
+            <ModalFooter className='d-flex justify-content-between'>
+              <Button outline onClick={toggle}>Cancelar</Button>{' '}
+              <Button  onClick={toggle}>Continuar</Button>
+            </ModalFooter>
+          </Modal>
+
+          {/* Bill Column */}
+          <Col sm='5'>
+            <Card className='p-3'>
+              <CardTitle>Factura</CardTitle>
+            </Card>
+          </Col>
+        </Row>
+      </Form>
   );
 }
