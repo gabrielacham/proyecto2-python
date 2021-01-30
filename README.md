@@ -20,12 +20,24 @@ Install the dependencies
 ```bash
 pip install -r requirements/local.txt
 ```
-
-Run the migrations and start the server!
+To start backend
+Go to backend folder, run the migrations and start the server!
 
 ```bash
+cd backend
 python manage.py migrate
 python manage.py runserver
 ```
 
 Yay! App running in `http://127.0.0.1:8000` :)
+
+To start frontend
+Go to frontend folder, install dependencies and run project! (yarn installed)
+
+```bash
+cd frontend
+npm install
+yarn start
+```
+
+Yay! App running in `http://localhost:3000` :)
