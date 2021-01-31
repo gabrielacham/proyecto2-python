@@ -36,7 +36,3 @@ class Sand_Ing(models.Model):
     tipo_sandwich = models.ForeignKey(Sandwich, on_delete=models.CASCADE)
     ingrediente = models.ForeignKey(Ingrediente, on_delete=models.CASCADE)
 
-
-
-
-
