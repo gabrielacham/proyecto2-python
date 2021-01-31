@@ -39,13 +39,13 @@ class SandwichDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #Sand_Ing
 
-class Sand_IngDetailt(generics.ListCreateAPIView):
-    queryset = Sand_IngSerializer.objects.all()
+class  Sand_IngList(generics.ListCreateAPIView):
+    queryset = Sand_Ing.objects.all()
     serializer_class = Sand_IngSerializer
 
 
 class Sand_IngDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Sand_IngSerializer.objects.all()
+    queryset = Sand_Ing.objects.all()
     serializer_class = Sand_IngSerializer
 
 
