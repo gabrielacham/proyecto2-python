@@ -21,14 +21,13 @@ class SandwichList(APIView):
         ser= SandwichSerializer(san, many=True)
         return Response(ser.data)
 
-    # def post(self, request, format=None):
-    #     ser= SandwichSerializer(data=request.data)
-    #     if ser.is_valid():
-    #         san= ser.data
-    #         return Response(san, status=status.HTTP_201_CREATED)
-    #     return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
     def post(self, request, format=None):
-        return Response(request.data, status=status.HTTP_201_CREATED)
+        ser= SandwichSerializer(data=request.data)
+        if ser.is_valid():
+            san= ser.data
+            return Response(san, status=status.HTTP_201_CREATED)
+        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class PedidoList(APIView):
