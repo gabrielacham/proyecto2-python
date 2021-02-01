@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Row,
   Col,
@@ -15,69 +15,177 @@ import {
  } from 'reactstrap';
 import "./styles.css";
 
-const sandwichSizes = ['Individual', 'Doble', 'Triple'];
+const sandwichSizes = [
+  {
+    tamano_san: 'Individual',
+    precio_san: 280
+  },
+  {
+    tamano_san: 'Doble',
+    precio_san: 430
+  },
+  {
+    tamano_san: 'Triple',
+    precio_san: 580
+  }
+];
 
 const ingredients = [
   {
-    name: 'Jamon',
-    price: 40
+    nombre_in: 'Jamon',
+    precio_in: 40
   },
   {
-    name: 'Champiñones',
-    price: 35
+    nombre_in: 'Champiñones',
+    precio_in: 35
   },
   {
-    name: 'Pimentón',
-    price: 30
+    nombre_in: 'Pimentón',
+    precio_in: 30
   },
   {
-    name: 'Doble queso',
-    price: 40
+    nombre_in: 'Doble queso',
+    precio_in: 40
   },
   {
-    name: 'Aceitunas',
-    price: 57.5
+    nombre_in: 'Aceitunas',
+    precio_in: 57.5
   },
   {
-    name: 'Pepperoni',
-    price: 38.5
+    nombre_in: 'Pepperoni',
+    precio_in: 38.5
   },
   {
-    name: 'Salchichón',
-    price: 62.5
+    nombre_in: 'Salchichón',
+    precio_in: 62.5
   },
 ];
 
-function renderOptions (data) {
-  return (
-      data.map((prop, key) => {
-          return (
-            <option>{prop}</option>
-          );
-      })
-  );
-}
 
-function renderIngredients (data) {
-  return (
-      data.map((prop, key) => {
-          return (
-            <Row className='justify-content-between ml-1 px-3'>
-              <CustomInput type="checkbox" id={`ingredient${key}`} label={prop.name} />
-              <Label>{`${prop.price} Bs`}</Label>
-            </Row>
-
-          );
-      })
-  );
-}
-
-
-export default function Home() {
+export default function Home(props) {
 
   const [modal, setModal] = useState(false);
+  const [subtotal, setSubtotal] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [order, setOrder] = useState([]);
+  const [sandwich, setSandwich] = useState(sandwichSizes[0] ? sandwichSizes[0].tamano_san : 0);
+  const prevSandwich = usePrevious(sandwich);
+
+  function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
+  useEffect(() => {
+    if(prevSandwich !== sandwich) {
+      let aux
+      if (sandwich){
+        let newSandwich = sandwichSizes.find(el => el.tamano_san === sandwich)
+        aux= subtotal + newSandwich.precio_san
+      }
+      if (prevSandwich){
+        let oldSandwich = sandwichSizes.find(el => el.tamano_san === prevSandwich)
+        aux= aux-oldSandwich.precio_san
+      }
+      setSubtotal(aux)
+    }
+  }, [prevSandwich, sandwich, subtotal])
 
   const toggle = () => setModal(!modal);
+
+
+  function renderOptions (data) {
+    return (
+        data.map((prop, key) => {
+            return (
+              <option key={key}>{prop.tamano_san}</option>
+            );
+        })
+    );
+  }
+
+  function renderIngredients (data) {
+    return (
+        data.map((prop, key) => {
+            return (
+              <Row key={key} className='justify-content-between ml-1 px-3'>
+                <CustomInput type="checkbox" id={`ingredient${key}`} label={prop.nombre_in} onChange={() => updateCheckSubtotal(prop)}/>
+                <Label>{`${prop.precio_in} Bs`}</Label>
+              </Row>
+            );
+        })
+    );
+  }
+
+function renderBillIngredients(list){
+  if (list) {
+    return (
+      list.map((el, key) => {
+        return (
+          <Col key={key}>
+            <Row className='justify-content-between ml-4 pl-3'>
+              <Label>{`${el.nombre_in} Bs`}</Label>
+                {' '}
+              <Label>{`${el.precio_in} Bs`}</Label>
+            </Row>
+          </Col>
+        );
+      })
+    );
+  }
+  return;
+}
+
+  function renderBill (){
+    if (order){
+      return (
+        order.map((el, key) => {
+          return (
+            <Col key={key}>
+              <Row className='justify-content-between ml-2 px-3'>
+                <Label>{`${el.tamano_san}`}</Label>
+                  {' '}
+                <Label>{`${el.precio_san} Bs`}</Label>
+              </Row>
+              {renderBillIngredients(el.ingredients)}
+            </Col>
+          );
+        })
+      );
+    }
+    return;
+  }
+
+  function updateCheckSubtotal (prop) {
+    prop.checked=!prop.checked;
+    let aux
+    if (prop.checked) {
+      aux= subtotal+prop.precio_in
+      setSubtotal(aux)
+    } else {
+      aux= subtotal-prop.precio_in
+      setSubtotal(aux)
+    }
+  }
+
+  function addSandwich (){
+    let addSandwich = sandwichSizes.find(el => el.tamano_san === sandwich)
+    let ingredientsList = ingredients.filter(el => el.checked === true)
+    let aux = subtotal + total
+    let newSandwich = {
+      ...addSandwich,
+      ingredients: [...ingredientsList]
+    }
+    let newOrder = [...order]
+    newOrder.push(newSandwich)
+    setOrder(newOrder)
+    setTotal(aux)
+    setModal(!modal)
+  }
+
 
   return (
       <Form>
@@ -85,11 +193,12 @@ export default function Home() {
           {/* Order Column */}
           <Col sm='7'>
             <Card className='p-3'>
+              <CardTitle className='h4'>Ingrese su Orden</CardTitle>
 
               {/* Size Select */}
               <FormGroup>
                 <Label for="sandwichSize">Tamaño</Label>
-                <CustomInput className='pr-3' type="select" name="sandwichSize" id="sandwichSize">
+                <CustomInput className='pr-3' type="select" name="sandwichSize" id="sandwichSize" onChange={({ target }) => setSandwich(target.value)}>
                   {renderOptions(sandwichSizes)}
                 </CustomInput>
               </FormGroup>
@@ -102,8 +211,16 @@ export default function Home() {
                 </div>
               </FormGroup>
 
+              <hr className="mb-2 mt-0"/>
+
+              {/*Subtotal Row*/}
+              <Row className='my-2 ml-2 mr-0 justify-content-between'>
+                <Label for="subtotal">Subtotal</Label>
+                <Label for="subtotal">{subtotal} Bs</Label>
+              </Row>
+
               {/* Buttons Row */}
-              <Row className='mx-1'>
+              <Row className='mx-1 mt-2'>
                 {/* Cancel Button */}
                 <Col sm='6'>
                   <Button outline className='home-cancel-button'>Cancelar</Button>
@@ -117,20 +234,38 @@ export default function Home() {
             </Card>
           </Col>
 
+          {/* Continue Modal */}
           <Modal isOpen={modal} toggle={toggle}>
             <ModalBody className='d-flex justify-content-center'>
               ¿Desea Agregar Otro Sandwich a su Pedido?
             </ModalBody>
             <ModalFooter className='d-flex justify-content-between'>
-              <Button outline onClick={toggle}>Cancelar</Button>{' '}
-              <Button  onClick={toggle}>Continuar</Button>
+              <Button outline onClick={toggle}>Cancelar</Button>
+                {' '}
+              <Button  onClick={() => addSandwich()}>Continuar</Button>
             </ModalFooter>
           </Modal>
 
           {/* Bill Column */}
           <Col sm='5'>
             <Card className='p-3'>
-              <CardTitle>Factura</CardTitle>
+              <CardTitle className='h4'>Factura</CardTitle>
+              {renderBill()}
+
+              <hr className="mb-2 mt-0"/>
+
+              {/*Subtotal Row*/}
+              <Row className='my-2 ml-2 mr-0 justify-content-between'>
+                <Label for="subtotal">Total</Label>
+                <Label for="subtotal">{total} Bs</Label>
+              </Row>
+
+              <hr className="mb-2 mt-0"/>
+
+              {/* Buttons Row */}
+              <Row className='mx-1 mt-2'>
+                <Button className='justify-content-center home-finish-button'>Finalizar Pedido</Button>
+              </Row>
             </Card>
           </Col>
         </Row>
