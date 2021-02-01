@@ -12,8 +12,9 @@ import {
   Modal,
   ModalBody,
   ModalFooter
- } from 'reactstrap';
+ } from 'reactstrap'; 
 import "./styles.css";
+import logo from '../../components/Navbar/logo.png';
 
 const sandwichSizes = [
   {
@@ -65,6 +66,7 @@ const ingredients = [
 export default function Home(props) {
 
   const [modal, setModal] = useState(false);
+  const [initModal, setInitModal] = useState(true);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const [order, setOrder] = useState([]);
@@ -95,6 +97,8 @@ export default function Home(props) {
   }, [prevSandwich, sandwich, subtotal])
 
   const toggle = () => setModal(!modal);
+
+  const toggleInitModal = () => setInitModal(!initModal);
 
 
   function renderOptions (data) {
@@ -190,6 +194,24 @@ function renderBillIngredients(list){
   return (
       <Form>
         <Row>
+
+          {/* Init Modal */}
+          <Modal isOpen={initModal} toggle={toggleInitModal}>
+            <ModalBody className='d-flex justify-content-center'>
+              <Col>
+                <Row className='justify-content-center h4'>
+                  ¡Bienvenido a Sandwiches UCAB!
+                </Row>
+                <Row className='justify-content-center'>
+                  <img src={logo} style={{width: '4.3rem'}} alt=''/>
+                </Row>
+              </Col>
+            </ModalBody>
+            <ModalFooter className='d-flex justify-content-center'>
+              <Button  onClick={toggleInitModal}>Iniciar la Compra</Button>
+            </ModalFooter>
+          </Modal>
+
           {/* Order Column */}
           <Col sm='7'>
             <Card className='p-3'>
@@ -236,11 +258,11 @@ function renderBillIngredients(list){
 
           {/* Continue Modal */}
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalBody className='d-flex justify-content-center'>
-              ¿Desea Agregar Otro Sandwich a su Pedido?
+            <ModalBody className='d-flex justify-content-center h4'>
+              ¿Desea agregar el sandwich a su pedido?
             </ModalBody>
             <ModalFooter className='d-flex justify-content-between'>
-              <Button outline onClick={toggle}>Cancelar</Button>
+              <Button outline className='home-cancel-button' onClick={toggle}>Cancelar</Button>
                 {' '}
               <Button  onClick={() => addSandwich()}>Continuar</Button>
             </ModalFooter>
