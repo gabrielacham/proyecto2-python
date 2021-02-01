@@ -7,9 +7,9 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
-from main.models import Ingrediente,Sandwich,Sand_Ing,Pedido,Ped_Sand
+from main.models import Ingrediente,Sandwich,Pedido
 
-from main.api.serializers import IngredienteSerializer,SandwichSerializer,Sand_IngSerializer,PedidoSerializer,Ped_SandSerializer
+from main.api.serializers import IngredienteSerializer,SandwichSerializer,PedidoSerializer
 
 # vistas basadas en clases genéricas:
 
@@ -39,14 +39,14 @@ class SandwichDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #Sand_Ing
 
-class  Sand_IngList(generics.ListCreateAPIView):
-    queryset = Sand_Ing.objects.all()
-    serializer_class = Sand_IngSerializer
+# class  Sand_IngList(generics.ListCreateAPIView):
+#     queryset = Sand_Ing.objects.all()
+#     serializer_class = Sand_IngSerializer
 
 
-class Sand_IngDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Sand_Ing.objects.all()
-    serializer_class = Sand_IngSerializer
+# class Sand_IngDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Sand_Ing.objects.all()
+#     serializer_class = Sand_IngSerializer
 
 
 #Pedido
@@ -62,11 +62,11 @@ class PedidoDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #Ped_Sand
 
-class Ped_SandList(generics.ListCreateAPIView):
-    queryset = Ped_Sand.objects.all()
-    serializer_class = Ped_SandSerializer
+# class Ped_SandList(generics.ListCreateAPIView):
+#     queryset = Ped_Sand.objects.all()
+#     serializer_class = Ped_SandSerializer
 
 
-class Ped_SandDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Ped_Sand.objects.all()
-    serializer_class = Ped_SandSerializer
+# class Ped_SandDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Ped_Sand.objects.all()
+#     serializer_class = Ped_SandSerializer

@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from main.api.views import IngredienteList,IngredienteDetail,         SandwichList,SandwichDetail,                            Sand_IngList,Sand_IngDetail,                              PedidoList, PedidoDetail,                              Ped_SandList,Ped_SandDetail
+from main.api.views import IngredienteList,IngredienteDetail,         SandwichList,SandwichDetail,                                                         PedidoList, PedidoDetail                             
 app_name = 'main'
 urlpatterns = [
   
@@ -17,8 +17,8 @@ urlpatterns = [
     path('api/Sandwich/<int:pk>/', SandwichDetail.as_view()),
 
     #Sand_Ing
-    path('api/Sand_Ing/', Sand_IngList.as_view()),
-    path('api/Sand_Ing/<int:pk>/',Sand_IngDetail.as_view()),
+    # path('api/Sand_Ing/', Sand_IngList.as_view()),
+    # path('api/Sand_Ing/<int:pk>/',Sand_IngDetail.as_view()),
 
     #Pedido
     path('api/Pedido/', PedidoList.as_view()),
@@ -26,8 +26,8 @@ urlpatterns = [
 
     #Ped_Sand
 
-    path('api/Ped_Sand/', Ped_SandList.as_view()),
-    path('api/Ped_Sand/<int:pk>/', Ped_SandDetail.as_view()),
+    # path('api/Ped_Sand/', Ped_SandList.as_view()),
+    # path('api/Ped_Sand/<int:pk>/', Ped_SandDetail.as_view()),
 
 
 ]
