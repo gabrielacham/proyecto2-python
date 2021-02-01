@@ -11,6 +11,9 @@ from main.models import Ingrediente, Sandwich, Pedido
 
 from main.api.serializers import IngredienteSerializer, SandwichSerializer, PedidoSerializer
 
+import json
+from types import SimpleNamespace
+
 class SandwichList(APIView):
 
     def get(self, request, format=None):
@@ -18,12 +21,15 @@ class SandwichList(APIView):
         ser= SandwichSerializer(san, many=True)
         return Response(ser.data)
 
+    # def post(self, request, format=None):
+    #     ser= SandwichSerializer(data=request.data)
+    #     if ser.is_valid():
+    #         san= ser.data
+    #         return Response(san, status=status.HTTP_201_CREATED)
+    #     return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
     def post(self, request, format=None):
-        ser= SandwichSerializer(data=request.data)
-        if ser.is_valid():
-            ser.save()
-            return Response(ser.data, status=status.HTTP_201_CREATED)
-        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(request.data, status=status.HTTP_201_CREATED)
+
 
 class PedidoList(APIView):
 
