@@ -20,7 +20,7 @@ export default function Header(props) {
         <Collapse isOpen={props.open} navbar>
           <Nav navbar>
             <NavItem>
-              <NavLink href="http://127.0.0.1:8000/">Admin</NavLink>
+              <NavLink href="http://127.0.0.1:8000/admin">Admin</NavLink>
             </NavItem>
             <NavItem>
               <NavLink href="/admin/home">Home</NavLink>
