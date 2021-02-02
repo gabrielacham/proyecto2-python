@@ -12,7 +12,8 @@ import {
   Modal,
   ModalBody,
   ModalFooter
- } from 'reactstrap'; 
+ } from 'reactstrap';
+import axios from 'axios';
 import "./styles.css";
 import logo from '../../components/Navbar/logo.png';
 
