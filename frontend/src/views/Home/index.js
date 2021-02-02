@@ -19,6 +19,7 @@ import axios from 'axios';
 import "./styles.css";
 import logo from '../../components/Navbar/logo.png';
 
+// Constante con los nombres y precios de cada tamaño de sandwich
 const sandwichSizes = [
   {
     tamano_sandwich: 'Individual',
@@ -46,8 +47,9 @@ export default function Home(props) {
   const [ingredients, setIngredients] = useState([]);
   const [descripcion, setDescripcion] = useState('');
   const [sandwich, setSandwich] = useState(sandwichSizes[0] ? sandwichSizes[0].tamano_sandwich : 0);
-  const prevSandwich = usePrevious(sandwich);
+  const prevSandwich = usePrevious(sandwich); //copia del nombre del sandwich previamente seleccionado
 
+  // Funcion para obtener el nombre del sandwich seleccionado
   function usePrevious(value) {
     const ref = useRef();
 
@@ -58,22 +60,24 @@ export default function Home(props) {
 }
 
   // ComponentDidUpdate
+  // Si el nombre del sandwich cambia, actualiza el valor del subtotal
   useEffect(() => {
-    if(prevSandwich !== sandwich) {
+    if(prevSandwich !== sandwich) { // verifica que el sandwich previamente seleccionado y el actual sean diferentes
       let aux
-      if (sandwich){
+      if (sandwich){ // Si hay un sandwich nuevo, le suma el precio de ese sandwich al subtotal
         let newSandwich = sandwichSizes.find(el => el.tamano_sandwich === sandwich)
         aux= subtotal + parseFloat(newSandwich.precio_sandwich)
       }
-      if (prevSandwich){
+      if (prevSandwich){ // Si había un sandwich seleccionado anteriormente, le resta el precio de ese sandwich al subtotal
         let oldSandwich = sandwichSizes.find(el => el.tamano_sandwich === prevSandwich)
         aux= aux - parseFloat(oldSandwich.precio_sandwich)
       }
-      setSubtotal(aux)
+      setSubtotal(aux) // Se actualiza el valor del subtotal
     }
   }, [prevSandwich, sandwich, subtotal])
 
   // ComponentDidMount
+  // Al renderizar la vista, se obtienen la lista de ingredientes disponibles
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/main/api/Ingrediente/")
@@ -81,8 +85,10 @@ export default function Home(props) {
       .catch(err => console.log(err));
 }, [setIngredients]);
 
+  // Abre o cierra el modal de finalizar pedido
   const toggle = () => setModal(!modal);
 
+  // Crea un Pedido nuevo para luego abrir o cerrar el modal de inicio
   const toggleInitModal = () => {
     var currentdate = new Date();
     let aux ={
@@ -99,7 +105,7 @@ export default function Home(props) {
     setInitModal(!initModal)
   };
 
-
+  // Renderiza las opciones del combo Tamaño Sandwich
   function renderOptions(data) {
     return (
         data.map((prop, key) => {
@@ -112,6 +118,7 @@ export default function Home(props) {
     );
   }
 
+  // 
   function renderIngredients(data) {
     return (
       data ?
