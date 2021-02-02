@@ -209,6 +209,11 @@ export default function Home(props) {
     setModal(!modal)
   }
 
+  function cancelOrder (){
+    axios
+      .delete(`http://127.0.0.1:8000/main/api/Pedido/${idpedido}`)
+      .catch(err => console.log(err));
+  }
 
   return (
       <Form>
@@ -306,6 +311,7 @@ export default function Home(props) {
                 <Col sm='6'>
                   <Button
                     outline
+                    onClick={() => cancelOrder()}
                     className='home-cancel-button'
                   >
                     Cancelar
