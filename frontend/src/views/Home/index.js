@@ -49,11 +49,12 @@ export default function Home(props) {
   const prevSandwich = usePrevious(sandwich);
 
   function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
+    const ref = useRef();
+
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
 }
 
   // ComponentDidUpdate
@@ -99,7 +100,7 @@ export default function Home(props) {
   };
 
 
-  function renderOptions (data) {
+  function renderOptions(data) {
     return (
         data.map((prop, key) => {
             return (
@@ -111,7 +112,7 @@ export default function Home(props) {
     );
   }
 
-  function renderIngredients (data) {
+  function renderIngredients(data) {
     return (
       data ?
         data.map((prop, key) => {
@@ -135,7 +136,7 @@ export default function Home(props) {
     );
   }
 
-  function renderBillIngredients(list){
+  function renderBillIngredients(list) {
     if (list) {
       return (
         list.map((el, key) => {
@@ -158,7 +159,7 @@ export default function Home(props) {
     return;
   }
 
-  function renderBill (){
+  function renderBill() {
     if (order){
       return (
         order.map((el, key) => {
@@ -182,7 +183,7 @@ export default function Home(props) {
     return;
   }
 
-  function updateCheckSubtotal (prop) {
+  function updateCheckSubtotal(prop) {
     prop.checked=!prop.checked;
     let aux
     if (prop.checked) {
@@ -194,7 +195,7 @@ export default function Home(props) {
     }
   }
 
-  function addSandwich (){
+  function addSandwich() {
     let addSandwich = sandwichSizes.find(el => el.tamano_sandwich === sandwich)
     let ingredientsList = ingredients.filter(el => el.checked === true)
     let aux = subtotal + total
@@ -216,18 +217,35 @@ export default function Home(props) {
     setModal(!modal)
   }
 
-  function cancelOrder (){
+  function cancelOrder() {
     axios
       .delete(`http://127.0.0.1:8000/main/api/Pedido/${idpedido}`)
+      .then(res => console.log(res))
       .catch(err => console.log(err));
     toggleInitModal()
   }
 
-  function createSandiwch (item){
+  function createSandiwch(item) {
     axios
       .post("http://127.0.0.1:8000/main/api/Sandwich/", item)
       .then(res => console.log(res))
       .catch(err => console.log(err));
+  }
+
+  function finishOrder() {
+    var currentdate = new Date();
+    let aux ={
+      id: idpedido,
+      porcentaje_oferta: 0,
+      descrip_pedido: descripcion,
+      precio_pedido: total,
+      fecha_pedido: currentdate.toISOString()
+    }
+    axios
+      .post("http://127.0.0.1:8000/main/api/Pedido/", aux)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
   }
 
   return (
@@ -392,7 +410,10 @@ export default function Home(props) {
 
               {/* Buttons Row */}
               <Row className='mx-1 mt-2'>
-                <Button className='justify-content-center home-finish-button'>
+                <Button
+                  className='justify-content-center home-finish-button'
+                  onClick={() => finishOrder()}
+                >
                   Finalizar Pedido
                 </Button>
               </Row>
