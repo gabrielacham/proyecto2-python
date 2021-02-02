@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from django.utils import timezone
 
 class Pedido(models.Model):
     descrip_pedido = models.CharField(max_length=200)
@@ -10,8 +11,15 @@ class Pedido(models.Model):
     def __str__(self):
         return self.descrip_pedido 
 
+    # def was_published_recently(self):
+    #     return self.fecha_pedido >= timezone.now() - datetime.timedelta(days=1)
+
     def was_published_recently(self):
-        return self.fecha_pedido >= timezone.now() - datetime.timedelta(days=1)
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.fecha_pedido <= now
+    was_published_recently.admin_order_field = 'fecha_pedido'
+    was_published_recently.boolean = True
+    was_published_recently.short_description = 'Published recently?'
 
 
 class Ingrediente(models.Model):
