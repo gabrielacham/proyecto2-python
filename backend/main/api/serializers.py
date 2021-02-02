@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main.models import Ingrediente,Sandwich,Sand_Ing,Pedido,Ped_Sand
+from main.models import Ingrediente,Sandwich,Pedido
 
 
 
@@ -16,11 +16,11 @@ class SandwichSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class Sand_IngSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Sand_Ing
+# class Sand_IngSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Sand_Ing
         
-        fields = '__all__'
+#         fields = '__all__'
 
 
 class PedidoSerializer(serializers.ModelSerializer):
@@ -29,8 +29,8 @@ class PedidoSerializer(serializers.ModelSerializer):
         
         fields = '__all__'
 
-class Ped_SandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ped_Sand
+# class Ped_SandSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Ped_Sand
         
-        fields = '__all__'
+#         fields = '__all__'
