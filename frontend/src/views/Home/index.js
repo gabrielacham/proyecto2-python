@@ -42,6 +42,8 @@ export default function Home(props) {
   const [initModal, setInitModal] = useState(true);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
+  const [descuento, setDescuento] = useState(0);
+  const [newTotal, setNewTotal] = useState(0);
   const [order, setOrder] = useState([]);
   const [idpedido, setPedidoId] = useState(0);
   const [ingredients, setIngredients] = useState([]);
@@ -211,6 +213,7 @@ export default function Home(props) {
     let addSandwich = sandwichSizes.find(el => el.tamano_sandwich === sandwich) // Objeto nuevo con el tamaño y el precio del sandwich seleccionado
     let ingredientsList = ingredients.filter(el => el.checked === true) // Arreglo de ingredientes extra seleccionados
     let aux = subtotal + total // suma del subtotal y el total
+    setNewTotal(aux)
     let newSandwich = {                 // Objeto con la informacion del sandwich nuevo:
       ...addSandwich,                   // Tamaño y precio
       ingredients: [...ingredientsList] // Arreglo ingredientes: nombre, id, precio, check
@@ -225,6 +228,22 @@ export default function Home(props) {
     createSandiwch(item)      // Creación del sandwich en la base de datos
     newOrder.push(newSandwich)// Agregar nuevo sandwich a la lista con el pedido
     setOrder(newOrder)        // Actualizar lista del pedido
+    if (newOrder.length === 3 ){
+      setNewTotal(aux - (aux * 0.1))
+      setDescuento(0.1)
+    }
+    if (newOrder.length === 4 ){
+      setNewTotal(aux - (aux * 0.2))
+      setDescuento(0.2)
+    }
+    if (newOrder.length === 5 ){
+      setNewTotal(aux - (aux * 0.3))
+      setDescuento(0.3)
+    }
+    if (newOrder.length >= 6 ){
+      setNewTotal(aux - (aux * 0.5))
+      setDescuento(0.5)
+    }
     setTotal(aux)             // Actualizar el precio total
     setModal(!modal)          // Cierra el modal
   }
@@ -235,6 +254,10 @@ export default function Home(props) {
       .delete(`http://127.0.0.1:8000/main/api/Pedido/${idpedido}`)
       .then(res => console.log(res))
       .catch(err => console.log(err));
+    setOrder([])
+    setTotal(0)
+    setNewTotal(0)
+    setDescuento(0)
     toggleInitModal() // Abre el modal inicial para una nueva orden
   }
 
@@ -251,9 +274,9 @@ export default function Home(props) {
     var currentdate = new Date();
     let aux ={
       id: idpedido,
-      porcentaje_oferta: 0,
+      porcentaje_oferta: descuento,
       descrip_pedido: descripcion,
-      precio_pedido: total,
+      precio_pedido: newTotal,
       fecha_pedido: currentdate.toISOString()
     }
     axios
@@ -261,6 +284,9 @@ export default function Home(props) {
       .then(res => console.log(res))
       .catch(err => console.log(err));
     setOrder([])    // Reinicia el arreglo del pedido
+    setTotal(0)
+    setNewTotal(0)
+    setDescuento(0)
     setInitModal(!initModal) // Se abre el modal inicial para iniciar una nueva orden
 
   }
@@ -412,13 +438,33 @@ export default function Home(props) {
 
               <hr className="mb-2 mt-0"/>
 
-              {/*Subtotal Row*/}
+              {/*Total Row*/}
               <Row className='my-2 ml-2 mr-0 justify-content-between'>
-                <Label for="subtotal">
+                <Label for="total">
                   Total
                 </Label>
-                <Label for="subtotal">
+                <Label for="total">
                   {total} Bs
+                </Label>
+              </Row>
+
+              {/*Discount Row*/}
+              <Row className='my-2 ml-2 mr-0 justify-content-between'>
+                <Label for="descuento">
+                  Descuento
+                </Label>
+                <Label for="descuento">
+                  {descuento*100} %
+                </Label>
+              </Row>
+
+              {/*Final Price Row*/}
+              <Row className='my-2 ml-2 mr-0 justify-content-between'>
+                <Label for="descuento">
+                  Precio Final
+                </Label>
+                <Label for="descuento">
+                  {newTotal} Bs
                 </Label>
               </Row>
 
