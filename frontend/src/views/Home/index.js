@@ -245,6 +245,8 @@ export default function Home(props) {
       .post("http://127.0.0.1:8000/main/api/Pedido/", aux)
       .then(res => console.log(res))
       .catch(err => console.log(err));
+    setOrder([])
+    setInitModal(!initModal)
 
   }
 
