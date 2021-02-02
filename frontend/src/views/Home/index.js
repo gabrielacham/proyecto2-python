@@ -21,16 +21,16 @@ import logo from '../../components/Navbar/logo.png';
 
 const sandwichSizes = [
   {
-    tamano_san: 'Individual',
-    precio_san: 280
+    tamano_sandwich: 'Individual',
+    precio_sandwich: 280.00
   },
   {
-    tamano_san: 'Doble',
-    precio_san: 430
+    tamano_sandwich: 'Doble',
+    precio_sandwich: 430.00
   },
   {
-    tamano_san: 'Triple',
-    precio_san: 580
+    tamano_sandwich: 'Triple',
+    precio_sandwich: 580.00
   }
 ];
 
@@ -45,7 +45,7 @@ export default function Home(props) {
   const [idpedido, setPedidoId] = useState(0);
   const [ingredients, setIngredients] = useState([]);
   const [descripcion, setDescripcion] = useState('');
-  const [sandwich, setSandwich] = useState(sandwichSizes[0] ? sandwichSizes[0].tamano_san : 0);
+  const [sandwich, setSandwich] = useState(sandwichSizes[0] ? sandwichSizes[0].tamano_sandwich : 0);
   const prevSandwich = usePrevious(sandwich);
 
   function usePrevious(value) {
@@ -61,12 +61,12 @@ export default function Home(props) {
     if(prevSandwich !== sandwich) {
       let aux
       if (sandwich){
-        let newSandwich = sandwichSizes.find(el => el.tamano_san === sandwich)
-        aux= subtotal + newSandwich.precio_san
+        let newSandwich = sandwichSizes.find(el => el.tamano_sandwich === sandwich)
+        aux= subtotal + parseFloat(newSandwich.precio_sandwich)
       }
       if (prevSandwich){
-        let oldSandwich = sandwichSizes.find(el => el.tamano_san === prevSandwich)
-        aux= aux-oldSandwich.precio_san
+        let oldSandwich = sandwichSizes.find(el => el.tamano_sandwich === prevSandwich)
+        aux= aux - parseFloat(oldSandwich.precio_sandwich)
       }
       setSubtotal(aux)
     }
@@ -104,7 +104,7 @@ export default function Home(props) {
         data.map((prop, key) => {
             return (
               <option key={key}>
-                {prop.tamano_san}
+                {prop.tamano_sandwich}
               </option>
             );
         })
@@ -143,7 +143,7 @@ export default function Home(props) {
             <Col key={key}>
               <Row className='justify-content-between ml-4 pl-3'>
                 <Label>
-                  {`${el.nombre_ingrediente} Bs`}
+                  {`${el.nombre_ingrediente}`}
                 </Label>
                   {' '}
                 <Label>
@@ -166,11 +166,11 @@ export default function Home(props) {
             <Col key={key}>
               <Row className='justify-content-between ml-2 px-3'>
                 <Label>
-                  {`${el.tamano_san}`}
+                  {`${el.tamano_sandwich}`}
                 </Label>
                   {' '}
                 <Label>
-                  {`${el.precio_san} Bs`}
+                  {`${el.precio_sandwich} Bs`}
                 </Label>
               </Row>
               {renderBillIngredients(el.ingredients)}
@@ -186,23 +186,30 @@ export default function Home(props) {
     prop.checked=!prop.checked;
     let aux
     if (prop.checked) {
-      aux= subtotal+prop.precio_ingrediente
+      aux= subtotal + parseFloat(prop.precio_ingrediente)
       setSubtotal(aux)
     } else {
-      aux= subtotal-prop.precio_ingrediente
+      aux= subtotal - parseFloat(prop.precio_ingrediente)
       setSubtotal(aux)
     }
   }
 
   function addSandwich (){
-    let addSandwich = sandwichSizes.find(el => el.tamano_san === sandwich)
+    let addSandwich = sandwichSizes.find(el => el.tamano_sandwich === sandwich)
     let ingredientsList = ingredients.filter(el => el.checked === true)
     let aux = subtotal + total
     let newSandwich = {
       ...addSandwich,
       ingredients: [...ingredientsList]
     }
+    let item = {
+      ...addSandwich,
+      id: 0,
+      ingrediente: ingredientsList.map(ingrediente => ingrediente.id),
+      pedido: idpedido
+    }
     let newOrder = [...order]
+    createSandiwch(item)
     newOrder.push(newSandwich)
     setOrder(newOrder)
     setTotal(aux)
@@ -212,6 +219,14 @@ export default function Home(props) {
   function cancelOrder (){
     axios
       .delete(`http://127.0.0.1:8000/main/api/Pedido/${idpedido}`)
+      .catch(err => console.log(err));
+    toggleInitModal()
+  }
+
+  function createSandiwch (item){
+    axios
+      .post("http://127.0.0.1:8000/main/api/Sandwich/", item)
+      .then(res => console.log(res))
       .catch(err => console.log(err));
   }
 
